@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="baxter_on" default="1"/>
+  <arg name="control" default="0"/>
+  <arg name="human" default="1"/>
+  <arg name="joy" default="1"/>
+  <arg name="avoid_off" default="1"/>
+  <param name="real_baxter" value="$(arg baxter_on)" type="int"/>
+  <param name="controller" value="$(arg control)" type="int"/>
+  <param name="joy_node" value="$(arg joy)" type="int"/>
+  <param name="avoidance_off" value="$(arg avoid_off)" type="int"/>
+
+  <node name="baxter_get_kinematics" pkg="kcl_stiffness" type="baxter_get_kinematics.py" output="screen"/>
+  <node name="torque_control" pkg="kcl_stiffness" type="baxter_control" output="screen"/>
+  <group if="$(arg joy)">
+    <include file="$(find sf_path_planning)/launch/keyboard_node.launch"/>
+  </group>
+  <node name="goal_broadcast" pkg="kcl_stiffness" type="goal_broadcast.py">
+    <param name="frame" type="string" value="torso" />
+    <param name="topic" type="string" value="/baxter/pose/desired" />
+  </node>
+  <node name="record" pkg="kcl_stiffness" type="record" output="screen"/>
+</launch>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This is the main launch file used to run all the nodes for stiffness adjustment.-->
+  <launch>
+    <!-- These lines are used to define the initializeable arguments and parameters-->
+    <!-- Argument "index" is set to the human index selected in the Kinect nodes. For example, if the Kinect detecst the human's elbow as "left_human_2", then we set argument "index" to be "2".-->
+    <!-- Argument "stiff_on" is set to enable fuzzy-based stiffness adjustment. Otherwise, the stiffness vector will be constant.-->
+    <!-- Argument "stiffness" is set to the maximum stiffness variable in the fuzzy-based stiffness adjustment.-->
+      <arg name="index" default="1"/>
+      <arg name="stiff_on" default="1"/>
+      <arg name="stiffness" default="100"/>
+
+      <!-- Assigning the argument "stiffness" value to parameter "stiffness_max" -->
+      <param name="stiffness_max" value="$(arg stiffness)" type="int"/>
+      <!-- Assigning the argument "stiff_on" value to parameter "stiffness_on" -->
+      <param name="stiffness_on" value="$(arg stiff_on)" type="int"/>
+
+      <!-- This node is used to produce distance information between points on the robot and points on the human body -->
+      <node pkg="kcl_stiff" type="distance_producer.py" name="distance_producer" respawn="false" output="screen">
+	       <param name="ind" type="int" value="$(arg index)"/>
+      </node>
+      <!-- This node is used to get the closest distance between points on the robot and points on the human body -->
+      <node pkg="kcl_stiff" type="closest_distance.py" name="closest_distance" respawn="false"/>
+      <!-- This node is used to estimate the relative velocity between the human and the robot -->
+      <node pkg="kcl_stiff" type="velocity_estimation.py" name="velocity_estimate" respawn="false"/>
+      <!-- This node is used to produce axial stiffness value from fuzzy inference mechanism -->
+      <node pkg="kcl_stiff" type="fuzzy_stiffness.py" name="fuzzy_stiffness" respawn="false" output="screen"/>
+  </launch>
