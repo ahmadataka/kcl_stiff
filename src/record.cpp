@@ -151,23 +151,23 @@ int main(int _argc, char **_argv)
   // Used to get the control signal
   ros::Subscriber torque_c_sub = n.subscribe("/robot/limb/left/joint_command", 10, get_control_torque);
   // Used to get the stiffness vector
-  ros::Subscriber stiff_sub = n.subscribe("/stiffness_vector", 10, get_stiff);
+  ros::Subscriber stiff_sub = n.subscribe("/fourbythree_topics/stiffness/stiffness_vector", 10, get_stiff);
   // Used to get the closest distance vector between human and robot
-  ros::Subscriber dist_sub = n.subscribe("/closest_distance/vector", 10, get_dist);
+  ros::Subscriber dist_sub = n.subscribe("/fourbythree_topics/stiffness/closest_distance/vector", 10, get_dist);
   // Used to get the Baxter's current pose
-  ros::Subscriber pose_sub = n.subscribe("/baxter/pose/current", 10, get_pose);
+  ros::Subscriber pose_sub = n.subscribe("/fourbythree_topics/stiffness/baxter/pose/current", 10, get_pose);
   // Used to get the Baxter's desired pose
-  ros::Subscriber target_sub = n.subscribe("/baxter/pose/desired", 10, get_target);
+  ros::Subscriber target_sub = n.subscribe("/fourbythree_topics/stiffness/baxter/pose/desired", 10, get_target);
   // Used to get the Baxter's jacobian
-  ros::Subscriber jacob_sub = n.subscribe("/baxter/jacobian", 10, get_jacob);
+  ros::Subscriber jacob_sub = n.subscribe("/fourbythree_topics/stiffness/baxter/jacobian", 10, get_jacob);
   // Used to get the gravity compensation term
   ros::Subscriber sub_gravity = n.subscribe("/robot/limb/left/gravity_compensation_torques", 10, get_gravity);
 
   // Define the ROS Publisher
   // Used to publish the record data
-  ros::Publisher recorded = n.advertise<kcl_stiff::record_data>("/record_data",10);
+  ros::Publisher recorded = n.advertise<kcl_stiff::record_data>("/fourbythree_topics/stiffness/record_data",10);
   // Used to publish the error flag of the robot's tip
-  ros::Publisher flag_pub = n.advertise<std_msgs::Float64>("/error_flag",10);
+  ros::Publisher flag_pub = n.advertise<std_msgs::Float64>("/fourbythree_topics/stiffness/error_flag",10);
 
   // Initialize the pose, target, and force
   pose.position.x = 0; pose.position.y = 0; pose.position.z = 0;

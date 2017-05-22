@@ -14,11 +14,11 @@ class cart_control(object):
     rospy.init_node('baxter_get_kinematics')
     # Initialize the ROS Publisher
     # Used to publish the robot's jacobian of the tip
-    pub = rospy.Publisher('/baxter/jacobian', Float64MultiArray, queue_size=10)
+    pub = rospy.Publisher('/fourbythree_topics/stiffness/baxter/jacobian', Float64MultiArray, queue_size=10)
     # Used to publish the the tip's position of the robot
-    pose_pub = rospy.Publisher('/baxter/pose/current', Pose, queue_size=10)
+    pose_pub = rospy.Publisher('/fourbythree_topics/stiffness/baxter/pose/current', Pose, queue_size=10)
     # Used to publish the Euler angle of the tip
-    euler_pub = rospy.Publisher('/baxter/angle/current', Float64MultiArray, queue_size=10)
+    euler_pub = rospy.Publisher('/fourbythree_topics/stiffness/baxter/angle/current', Float64MultiArray, queue_size=10)
 
     # Define the kinematics of the Baxter's left hand
     self.kin_gripper = baxter_kinematics('left','hand')

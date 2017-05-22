@@ -35,7 +35,7 @@ class stiffness(object):
 
     # Initialize the ROS Publisher
     # Used to publish the stiffness vector
-    pub = rospy.Publisher('/stiffness_vector', Float64MultiArray, queue_size=10)
+    pub = rospy.Publisher('/fourbythree_topics/stiffness/stiffness_vector', Float64MultiArray, queue_size=10)
 
     # Initialize the ROS Subscriber
     # Used to get the human-robot closest distance in scalar

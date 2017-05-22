@@ -265,25 +265,25 @@ int main(int _argc, char **_argv)
   // Used to get the robot's joint state
   ros::Subscriber joint_sub = n.subscribe("/robot/joint_states", 10, get_joint);
   // Used to get the robot's current tip position
-  ros::Subscriber pose_sub = n.subscribe("/baxter/pose/current", 10, get_pose);
+  ros::Subscriber pose_sub = n.subscribe("/fourbythree_topics/stiffness/baxter/pose/current", 10, get_pose);
   // Used to get the robot's Jacobian of the tip
-  ros::Subscriber jacob_sub = n.subscribe("/baxter/jacobian", 10, get_jacob);
+  ros::Subscriber jacob_sub = n.subscribe("/fourbythree_topics/stiffness/baxter/jacobian", 10, get_jacob);
   // Used to get the robot's current Euler angle of the tip
-  ros::Subscriber angle_sub = n.subscribe("/baxter/angle/current", 10, get_euler);
+  ros::Subscriber angle_sub = n.subscribe("/fourbythree_topics/stiffness/baxter/angle/current", 10, get_euler);
   // Used to get the stiffness vector
-  ros::Subscriber stiff_sub = n.subscribe("/stiffness_vector", 10, get_stiff);
+  ros::Subscriber stiff_sub = n.subscribe("/fourbythree_topics/stiffness/stiffness_vector", 10, get_stiff);
   // Used to get the input from keyboard/Joystick
-  ros::Subscriber goal_sub = n.subscribe("/joy", 10, get_joy);
+  ros::Subscriber goal_sub = n.subscribe("/fourbythree_topics/stiffness/joy", 10, get_joy);
   // Used to get the Baxter's target for the tip
-  ros::Subscriber target_sub = n.subscribe("/baxter_target", 10, get_target);
+  ros::Subscriber target_sub = n.subscribe("/fourbythree_topics/stiffness/baxter_target", 10, get_target);
 
   // Define the ROS Publisher
   // Used to send the torque signal
   ros::Publisher joint_command = n.advertise<baxter_core_msgs::JointCommand>("/robot/limb/left/joint_command",10);
   // Used to publish the desired pose
-  ros::Publisher pub_pose_desired = n.advertise<geometry_msgs::Pose>("/baxter/pose/desired",10);
+  ros::Publisher pub_pose_desired = n.advertise<geometry_msgs::Pose>("/fourbythree_topics/stiffness/baxter/pose/desired",10);
   // Used to publish the twist of the Baxter's tip
-  ros::Publisher pub_twist = n.advertise<geometry_msgs::Vector3>("/agent/ee/twist",10);
+  ros::Publisher pub_twist = n.advertise<geometry_msgs::Vector3>("/fourbythree_topics/stiffness/agent/ee/twist",10);
 
   // Define the variable used to sent the updated desired pose
   geometry_msgs::Pose pose_d_sent;

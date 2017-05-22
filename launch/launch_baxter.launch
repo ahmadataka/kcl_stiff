@@ -31,7 +31,7 @@
   <!-- This node is used to broadcast a goal frame for the tip of the robot -->
   <node name="goal_broadcast" pkg="kcl_stiff" type="goal_broadcast.py">
     <param name="frame" type="string" value="torso" />
-    <param name="topic" type="string" value="/baxter/pose/desired" />
+    <param name="topic" type="string" value="/fourbythree_topics/stiffness/baxter/pose/desired" />
   </node>
   <!-- This node is used to record data for experiment -->
   <node name="record" pkg="kcl_stiff" type="record_stiffness" output="screen"/>
