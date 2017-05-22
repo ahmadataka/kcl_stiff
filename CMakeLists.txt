@@ -8,6 +8,11 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   tf
+  urdf
+  kdl_parser
+  baxter_core_msgs
+  message_generation
+  pcl_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -44,11 +49,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+ FILES
+ record_data.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -65,10 +69,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+ DEPENDENCIES
+ std_msgs  # Or other packages containing msgs
+ baxter_core_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -128,16 +133,28 @@ include_directories(
 # add_dependencies(kcl_stiff ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(kcl_stiff_node src/kcl_stiff_node.cpp)
+add_executable(baxter_torque_control src/baxter_torque_signal.cpp)
+add_executable(record_stiffness src/record.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(kcl_stiff_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(baxter_torque_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(record_stiffness ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(kcl_stiff_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(baxter_torque_control
+  ${catkin_LIBRARIES}
+  -larmadillo
+  -lblas
+  -llapack
+)
+
+target_link_libraries(record_stiffness
+  ${catkin_LIBRARIES}
+  -larmadillo
+  -lblas
+  -llapack
+)
 
 #############
 ## Install ##

@@ -1,23 +1,38 @@
 <?xml version="1.0"?>
+<!-- This is the launch file used to run the robot, specifically Baxter.-->
 <launch>
+  <!-- These lines are used to define the initializeable arguments and parameters-->
+  <!-- Argument "baxter_on" is set to "1" when real Baxter, instead of simulation, is used.-->
+  <!-- Argument "control" is set to "0" for robot's position control.-->
+  <!-- Argument "human" is set to the human index selected in the Kinect nodes. For example, if the Kinect detecst the human's elbow as "left_human_2", then we set argument "human" to be "2".-->
+  <!-- Argument "joy" is set to "1" to enable keyboard input.-->
+  <!-- Argument "avoid_off" is set to "1" to disable obstacle avoidance.-->
   <arg name="baxter_on" default="1"/>
   <arg name="control" default="0"/>
   <arg name="human" default="1"/>
   <arg name="joy" default="1"/>
   <arg name="avoid_off" default="1"/>
+  <!-- Assigning the arguments' value to global parameters -->
   <param name="real_baxter" value="$(arg baxter_on)" type="int"/>
   <param name="controller" value="$(arg control)" type="int"/>
   <param name="joy_node" value="$(arg joy)" type="int"/>
   <param name="avoidance_off" value="$(arg avoid_off)" type="int"/>
 
-  <node name="baxter_get_kinematics" pkg="kcl_stiffness" type="baxter_get_kinematics.py" output="screen"/>
-  <node name="torque_control" pkg="kcl_stiffness" type="baxter_control" output="screen"/>
+ <!-- This node is used to get the kinematics information (Jacobian, forward kinematics, etc.) of the Baxter -->
+  <node name="baxter_get_kinematics" pkg="kcl_stiff" type="baxter_get_kinematics.py" output="screen"/>
+  <!-- This node is used to do torque control for Baxter -->
+  <node name="torque_control" pkg="kcl_stiff" type="baxter_torque_control" output="screen"/>
+
+  <!-- Used to get the input from the keyboard -->
   <group if="$(arg joy)">
     <include file="$(find sf_path_planning)/launch/keyboard_node.launch"/>
   </group>
-  <node name="goal_broadcast" pkg="kcl_stiffness" type="goal_broadcast.py">
+
+  <!-- This node is used to broadcast a goal frame for the tip of the robot -->
+  <node name="goal_broadcast" pkg="kcl_stiff" type="goal_broadcast.py">
     <param name="frame" type="string" value="torso" />
     <param name="topic" type="string" value="/baxter/pose/desired" />
   </node>
-  <node name="record" pkg="kcl_stiffness" type="record" output="screen"/>
+  <!-- This node is used to record data for experiment -->
+  <node name="record" pkg="kcl_stiff" type="record_stiffness" output="screen"/>
 </launch>
