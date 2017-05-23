@@ -2,38 +2,58 @@
 #include "std_msgs/Float64MultiArray.h"
 #include <actionlib/client/simple_action_client.h>
 #include "fourbythree_msgs/ExecuteInstructionAction.h"
-#include <sstream>
+#include <string>
+#include <iostream>
 
 std_msgs::Float64MultiArray stiffness;
 typedef actionlib::SimpleActionClient<fourbythree_msgs::ExecuteInstructionAction> Client;
-
+std::string opening, commas, closing, stiff_spring, final_stiff;
+fourbythree_msgs::ExecuteInstructionGoal goal;
 // This function is used to get the stiffness vector
 void get_stiff(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
   stiffness = *msg;
+  Client client("execute_sm_instruction", true);
+  client.waitForServer();
+
+  final_stiff = "";
+  for(unsigned char i=0; i<3; i++)
+  {
+    stiff_spring = boost::lexical_cast<std::string>(stiffness.data[i]);
+
+    final_stiff = final_stiff + stiff_spring;
+    if(i!=2) final_stiff = final_stiff + commas;
+  }
+  final_stiff = opening + final_stiff + closing;
+
+  goal.parameters = final_stiff;
+
+  client.sendGoal(goal);
+
+  client.waitForResult(ros::Duration(0.025));
 }
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "send_action_stiffness");
   ros::NodeHandle n;
-  Client client("execute_sm_instruction", true); // true -> don't need ros::spin()
+
   // Used to get the stiffness vector
   ros::Subscriber stiff_sub = n.subscribe("/fourbythree_topics/stiffness/stiffness_vector", 10, get_stiff);
+  unsigned char flag_action = 0;
+  stiffness.data.clear();
+  opening = "[";
+  closing = "]";
+  final_stiff = "";
+  commas = ", ";
 
-  client.waitForServer();
-
-  fourbythree_msgs::ExecuteInstructionGoal goal;
   goal.type = "STIFFNESS";
-  // std::ostringstream stiff_string;
-  // stiff_string << "[" << stiffness.data[0] << ", " << stiffness.data[1] << ", " << stiffness.data[2] << "]";
-  // goal.parameters = stiff_string.str();
-  goal.parameters = "GOAL";
-  // sprintf(goal.parameters,"[%f, %f, %f]", stiffness.data[0], stiffness.data[1], stiffness.data[2]);
-  client.sendGoal(goal);
-  client.waitForResult(ros::Duration(5.0));
-  if (client.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    printf("Yay! The dishes are now clean");
-  printf("Current State: %s\n", client.getState().toString().c_str());
+
+  while(ros::ok())
+  {
+
+    ros::spin();
+  }
+
   return 0;
 }

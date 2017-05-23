@@ -138,12 +138,14 @@ include_directories(
 add_executable(baxter_torque_control src/baxter_torque_signal.cpp)
 add_executable(record_stiffness src/record.cpp)
 add_executable(send_action_stiffness src/send_action_stiffness.cpp)
+add_executable(server_stiffness src/server_stiffness.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(baxter_torque_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(record_stiffness ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(send_action_stiffness ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(server_stiffness ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(baxter_torque_control
@@ -162,6 +164,11 @@ target_link_libraries(record_stiffness
 
 target_link_libraries(
   send_action_stiffness
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(
+  server_stiffness
   ${catkin_LIBRARIES}
 )
 
