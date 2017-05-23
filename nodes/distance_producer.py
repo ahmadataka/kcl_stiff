@@ -63,11 +63,11 @@ if __name__ == '__main__':
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
                 continue
             # Put the values
-        	pose_dummy.position.x = trans[0]
-        	pose_dummy.position.y = trans[1]
-        	pose_dummy.position.z = trans[2]
+            pose_dummy.position.x = trans[0]
+            pose_dummy.position.y = trans[1]
+            pose_dummy.position.z = trans[2]
             # Put the Pose into the PoseArray
-        	pose_frame.poses.append(pose_dummy)
+            pose_frame.poses.append(pose_dummy)
 
         # Listen to the frames on the human body
     	for i in range(0,number_human):

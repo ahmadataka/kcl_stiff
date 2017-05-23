@@ -25,7 +25,7 @@
 
   <!-- Used to get the input from the keyboard -->
   <group if="$(arg joy)">
-    <include file="$(find sf_path_planning)/launch/keyboard_node.launch"/>
+    <include file="$(find kcl_stiff)/launch/keyboard_node.launch"/>
   </group>
 
   <!-- This node is used to broadcast a goal frame for the tip of the robot -->

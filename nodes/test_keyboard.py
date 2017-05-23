@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # Initialize the ROS Node
     rospy.init_node('read_keyboard')
     # Define the ROS Publisher used to send the character
-    key_pub = rospy.Publisher('/fourbythree_topics/ergonomics/keyboard_input', String, queue_size = 10)
+    key_pub = rospy.Publisher('/fourbythree_topics/stiffness/keyboard_input', String, queue_size = 10)
     # Set the rate to be 40 Hz
     rate = rospy.Rate(40.0)
     # Reset the flag used to check the incorrect character

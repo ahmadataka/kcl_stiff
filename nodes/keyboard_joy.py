@@ -15,7 +15,7 @@ class keyboard_joy(object):
     # Define the ROS Publisher used to send Joy message
     self.key_pub = rospy.Publisher('keyboard_msg', Joy, queue_size = 10)
     # Define the ROS Subscriber used to read the character from keyboard
-    key_sub = rospy.Subscriber('/fourbythree_topics/ergonomics/keyboard_input', String, self.get_key)
+    key_sub = rospy.Subscriber('/fourbythree_topics/stiffness/keyboard_input', String, self.get_key)
     # Set the rate to be 40 Hz
     rate = rospy.Rate(40.0)
     # Define the String class
