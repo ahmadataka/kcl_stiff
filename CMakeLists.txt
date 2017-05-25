@@ -165,6 +165,7 @@ target_link_libraries(record_stiffness
 target_link_libraries(
   send_action_stiffness
   ${catkin_LIBRARIES}
+  -ljsoncpp
 )
 
 target_link_libraries(

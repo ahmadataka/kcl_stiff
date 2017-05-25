@@ -5,11 +5,13 @@
 #include "fourbythree_msgs/ExecuteInstructionAction.h"
 #include <string>
 #include <iostream>
+#include <jsoncpp/json/json.h>
+#include <sstream>
 
 std_msgs::Float64MultiArray stiffness;
 typedef actionlib::SimpleActionClient<fourbythree_msgs::ExecuteInstructionAction> Client;
-std::string opening, commas, closing, stiff_spring, final_stiff;
 fourbythree_msgs::ExecuteInstructionGoal goal;
+Json::Value stiff_str;
 // This function is used to get the stiffness vector
 void get_stiff(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
@@ -29,10 +31,6 @@ int main(int argc, char** argv)
   {
     stiffness.data.push_back(0);
   }
-  opening = "[";
-  closing = "]";
-  final_stiff = "";
-  commas = ", ";
 
   goal.type = "STIFFNESS";
   Client client("execute_sm_instruction", true);
@@ -43,17 +41,15 @@ int main(int argc, char** argv)
 
     flag_action = 1;
 
-    final_stiff = "";
+    stiff_str.clear();
     for(unsigned char i=0; i<3; i++)
     {
-      stiff_spring = boost::lexical_cast<std::string>(stiffness.data[i]);
-
-      final_stiff = final_stiff + stiff_spring;
-      if(i!=2) final_stiff = final_stiff + commas;
+      stiff_str.append(stiffness.data[i]);
     }
-    final_stiff = opening + final_stiff + closing;
 
-    goal.parameters = final_stiff;
+    std::stringstream ss;
+    ss << stiff_str;
+    goal.parameters = ss.str();
 
     client.sendGoal(goal);
 
