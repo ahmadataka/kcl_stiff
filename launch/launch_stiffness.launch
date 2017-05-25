@@ -24,4 +24,6 @@
       <node pkg="kcl_stiff" type="velocity_estimation.py" name="velocity_estimate" respawn="false"/>
       <!-- This node is used to produce axial stiffness value from fuzzy inference mechanism -->
       <node pkg="kcl_stiff" type="fuzzy_stiffness.py" name="fuzzy_stiffness" respawn="false" output="screen"/>
+      <!-- This node is a client node used to send the stiffness to the robot as a ROS Action -->
+      <node pkg="kcl_stiff" type="send_action_stiffness" name="send_action_stiffness" respawn="false" output="screen"/>
   </launch>
