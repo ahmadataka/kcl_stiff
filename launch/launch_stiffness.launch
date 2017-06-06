@@ -14,6 +14,12 @@
       <!-- Assigning the argument "stiff_on" value to parameter "stiffness_on" -->
       <param name="stiffness_on" value="$(arg stiff_on)" type="int"/>
 
+      <!-- This nodes are for setting up the Kinect -->
+      <!-- Initialize the Kinect's position and orientation with respect to the robot's base -->
+      <node name="camera_robot_broadcast" pkg="kcl_stiff" type="camera_robot_broadcast.py"/>
+      <!-- Track the human movement using Kinect. Launch file openni.launch in openni_launch package needs to be running beforehand. -->
+      <!-- <node name="openni_tracker" pkg="openni_tracker" type="openni_tracker"/> -->
+
       <!-- This node is used to produce distance information between points on the robot and points on the human body -->
       <node pkg="kcl_stiff" type="distance_producer.py" name="distance_producer" respawn="false" output="screen">
 	       <param name="ind" type="int" value="$(arg index)"/>
