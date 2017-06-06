@@ -26,13 +26,17 @@ if __name__ == '__main__':
     tip_pose = rospy.Publisher('/fourbythree_topics/stiffness/human_robot_distance', PoseArray, queue_size = 10)
 
     # Define the base frame
-    base_frame = 'torso'
+    # base_frame = 'torso'
+    base_frame = 'base'
     # Initialize empty array used to save the name of the robot's frame
     frame_robot = []
     # Push back the name of the robot's frame
-    frame_robot.append('left_hand_camera')
-    frame_robot.append('left_lower_forearm')
-    frame_robot.append('left_wrist')
+    # frame_robot.append('left_hand_camera')
+    # frame_robot.append('left_lower_forearm')
+    # frame_robot.append('left_wrist')
+    frame_robot.append('flange')
+    frame_robot.append('link5')
+    frame_robot.append('link4')
     # Enter the value for the number of robot's frame used
     number_robot = 3
 
@@ -44,7 +48,6 @@ if __name__ == '__main__':
     frame_human.append('left_hand'+'_'+str(index))
     # Enter the value for the number of human's frame used
     number_human = 3
-
     # Set the rate of the code to be 40 Hz
     rate = rospy.Rate(40.0)
 
@@ -68,6 +71,8 @@ if __name__ == '__main__':
             pose_dummy.position.z = trans[2]
             # Put the Pose into the PoseArray
             pose_frame.poses.append(pose_dummy)
+            # print frame_robot[i]
+            # print pose_dummy
 
         # Listen to the frames on the human body
     	for i in range(0,number_human):
@@ -84,6 +89,9 @@ if __name__ == '__main__':
     	  pose_dummy.position.z = trans[2]
           # Put the Pose into the PoseArray
     	  pose_frame.poses.append(pose_dummy)
+        #   print frame_human[i]
+        #   print pose_dummy
+
 
         # Check the length of the Pose array
     	if(len(pose_frame.poses) == number_robot+number_human):
@@ -98,6 +106,7 @@ if __name__ == '__main__':
     	      pose_dummy.position.z = pose_frame.poses[i].position.z - pose_frame.poses[number_robot+j].position.z
     	      # Put the distance information as a Pose Array format
     	      pose_sent.poses.append(pose_dummy)
+
           # Publish the distance vector array
     	  tip_pose.publish(pose_sent)
 
