@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Created by King's College London and Queen Mary University of London, 2017.
 # This code is used to estimate the relative velocity between the human and the robot
 import roslib; roslib.load_manifest('kcl_stiff')
 import rospy, math, time

@@ -1,73 +1,51 @@
 #!/usr/bin/env python
-# Software License Agreement (BSD License)
-#
-# Copyright (c) 2008, Willow Garage, Inc.
-# All rights reserved.
-#
-
-
+# Created by King's College London and Queen Mary University of London, 2017.
+# This node is used to nitialize the Kinect's position and orientation with respect to the robot's base
 import roslib; roslib.load_manifest('kcl_stiff')
 import rospy
 from geometry_msgs.msg import Pose
 from geometry_msgs.msg import Transform
 import tf
-from sympy import *
 import math
 
 class goal_broadcast(object):
   def __init__(self):
+    # Initialize the ROS Node
     rospy.init_node('camera_baxter_broadcast')
-    #self.ref_frame = "head"
+    # Define the reference frame which is the base of the robot in this case
     self.ref_frame = "base"
+    # Define the frame to be transformed which is the frame of Kinect Camera in this case
     self.active_frame = "openni_link"
-    # self.active_frame = "openni_rgb_optical_frame"
+
+    # Transformed degree to radian
     deg_to_rad = math.pi/180.0
 
-    yaw = 2.54857
-    pitch = -0.02827
-    roll = -0.01238
-    quat = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+    # Read the position of the Camera with respect to the robot from camera callibration stage done by Tekniker
+    x_camera = 0.94338
+    y_camera = -2.40965
+    z_camera = 0.42202
 
+    # Read the orientation (Euler angle) of the Camera with respect to the robot from camera callibration stage done by Tekniker
+    yaw_camera = 2.54857
+    pitch_camera = -0.02827
+    roll_camera = -0.01238
+
+    # Transform the Euler angle into quaternion
+    quat = tf.transformations.quaternion_from_euler(roll_camera, pitch_camera, yaw_camera)
+    # Set the rate to be 10 Hz
     rate = rospy.Rate(10.0)
-    # angle = 15.0*3.14/180.0
-    # rot_mat = fromTranslationRotation(translation, rotation)
-    # print rot_mat
-    # R = Matrix([[cos(angle), 0, sin(angle)],
-	# 	[0, 1, 0],
-	# 	[-sin(angle), 0, cos(angle)]])
-    # trace = R[0,0] + R[1,1] + R[2,2];
-    # if( trace > 0 ):
-    #   s = 0.5 / sqrt(trace+ 1.0);
-    #   w = 0.25 / s;
-    #   x = ( R[2,1] - R[1,2] ) * s;
-    #   y = ( R[0,2] - R[2,0] ) * s;
-    #   z = ( R[1,0] - R[0,1] ) * s;
-    # else:
-    #   if ( R[0,0] > R[1,1] and R[0,0] > R[2,2] ):
-	# s = 2.0 * sqrt( 1.0 + R[0,0] - R[1,1] - R[2,2]);
-	# w = (R[2,1] - R[1,2] ) / s;
-	# x = 0.25 * s;
-	# y = (R[0,1] + R[1,0] ) / s;
-	# z = (R[0,2] + R[2,0] ) / s;
-    #   elif (R[1,1] > R[2,2]):
-	# s = 2.0 * sqrt( 1.0 + R[1,1] - R[0,0] - R[2,2]);
-	# w = (R[0,2] - R[2,0] ) / s;
-	# x = (R[0,1] + R[1,0] ) / s;
-	# y = 0.25 * s;
-	# z = (R[1,2] + R[2,1] ) / s;
-    #   else:
-	# s = 2.0 * sqrt( 1.0 + R[2,2] - R[0,0] - R[1,1] );
-	# w = (R[1,0] - R[0,1] ) / s;
-	# x = (R[0,2] + R[2,0] ) / s;
-	# y = (R[1,2] + R[2,1] ) / s;
-	# z = 0.25 * s;
+
     while (not rospy.is_shutdown()):
+      # Initialize the TF broadcaster
       goal = tf.TransformBroadcaster()
-      goal.sendTransform((0.94338, -2.40965, 0.42202),
+      # Transform the camera frame with respect to the base frame of the robot with the callibration value
+      goal.sendTransform((x_camera, y_camera, z_camera),
 			(quat[0], quat[1], quat[2], quat[3]),
 			rospy.Time.now(),
 			self.active_frame,
 			self.ref_frame)
+
+      # Sleep until 1/10 ss
       rate.sleep()
 
 

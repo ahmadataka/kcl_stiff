@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
+<!-- Created by King's College London and Queen Mary University of London, 2017.-->
 <!-- This is the main launch file used to run all the nodes for stiffness adjustment.-->
   <launch>
     <!-- These lines are used to define the initializeable arguments and parameters-->
     <!-- Argument "index" is set to the human index selected in the Kinect nodes. For example, if the Kinect detecst the human's elbow as "left_human_2", then we set argument "index" to be "2".-->
     <!-- Argument "stiff_on" is set to enable fuzzy-based stiffness adjustment. Otherwise, the stiffness vector will be constant.-->
-    <!-- Argument "stiffness" is set to the maximum stiffness variable in the fuzzy-based stiffness adjustment.-->
+    <!-- Argument "stiffness" is set to the maximum stiffness variable in the fuzzy-based stiffness adjustment. This should not be changed without permission as it influences control implementation by CNR-ITIA.-->
       <arg name="index" default="1"/>
       <arg name="stiff_on" default="1"/>
       <arg name="stiffness" default="100"/>
@@ -14,11 +15,9 @@
       <!-- Assigning the argument "stiff_on" value to parameter "stiffness_on" -->
       <param name="stiffness_on" value="$(arg stiff_on)" type="int"/>
 
-      <!-- This nodes are for setting up the Kinect -->
+      <!-- This nodes are for setting up the Kinect. This part necessitate the Kinect OpenNI nodes and/or the human tracker OpenNI nodes from Tekniker to be running beforehand. -->
       <!-- Initialize the Kinect's position and orientation with respect to the robot's base -->
       <node name="camera_robot_broadcast" pkg="kcl_stiff" type="camera_robot_broadcast.py"/>
-      <!-- Track the human movement using Kinect. Launch file openni.launch in openni_launch package needs to be running beforehand. -->
-      <!-- <node name="openni_tracker" pkg="openni_tracker" type="openni_tracker"/> -->
 
       <!-- This node is used to produce distance information between points on the robot and points on the human body -->
       <node pkg="kcl_stiff" type="distance_producer.py" name="distance_producer" respawn="false" output="screen">

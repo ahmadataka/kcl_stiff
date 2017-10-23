@@ -1,16 +1,16 @@
 #!/usr/bin/env python
+# Created by King's College London and Queen Mary University of London, 2017.
 # This code is used to get the closest distance between points on the robot and points on the human body
+# Needs numpy python library. Read Readme for download instructions
 import roslib
 roslib.load_manifest('kcl_stiff')
 import rospy
 import math
 import tf
 import numpy as np
-from sympy import *
 from geometry_msgs.msg import Pose
 from geometry_msgs.msg import PoseArray
 from std_msgs.msg import Float64MultiArray
-from sympy.mpmath import norm
 
 class closest_distance(object):
   def __init__(self):
@@ -58,7 +58,7 @@ class closest_distance(object):
   # This function is used to receive the distance information between robot and human
   def get_distance(self,msg):
     for i in range(0,self.bound):
-      self.dist[i] = Matrix([[msg.poses[i].position.x],[msg.poses[i].position.y],[msg.poses[i].position.z]])
+      self.dist[i] = np.array([[msg.poses[i].position.x],[msg.poses[i].position.y],[msg.poses[i].position.z]])
 
   # This function is used to initialize the distance array
   def initialize(self):
@@ -66,7 +66,7 @@ class closest_distance(object):
     self.dist = []
     # Put zero as many as the number of all possible frame combinations
     for i in range(0,self.bound):
-      self.dist.append(ones(3,1))
+      self.dist.append(np.ones((3,1)))
 
   # This functoin is used to calculate the closest distance between robot and human
   def close(self):
@@ -77,7 +77,7 @@ class closest_distance(object):
 
     for i in range(0,9):
       # Calculate the magnitude of the distance
-      magni = norm(self.dist[i])
+      magni = np.linalg.norm(self.dist[i])
       # Check whether the distance is less than the maximum value
       if(magni<self.maks):
         # If so, update the maximum value and the index

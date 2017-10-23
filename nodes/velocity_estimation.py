@@ -1,15 +1,13 @@
 #!/usr/bin/env python
+# Created by King's College London and Queen Mary University of London, 2017.
 # This code is used to estimate the relative velocity between the human and the robot
 import roslib
 roslib.load_manifest('kcl_stiff')
 import rospy
 import math
 import tf
-import numpy as np
-from sympy import *
 from geometry_msgs.msg import Pose
 from std_msgs.msg import Float64MultiArray
-from sympy.mpmath import norm
 
 class closest_distance(object):
   def __init__(self):
@@ -37,6 +35,7 @@ class closest_distance(object):
     # Set the rate to be 40 Hz
     self.freq = 40.0
     rate = rospy.Rate(self.freq)
+
     while not rospy.is_shutdown():
         # Estimate the velocity
         self.get_vel()

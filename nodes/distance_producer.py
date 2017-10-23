@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Created by King's College London and Queen Mary University of London, 2017.
 # This code is used to produce distance information between points on the robot and points on the human body
 import roslib
 roslib.load_manifest('kcl_stiff')
@@ -25,28 +26,24 @@ if __name__ == '__main__':
     # Define the ROS Publisher used to send the robot-human distance
     tip_pose = rospy.Publisher('/fourbythree_topics/stiffness/human_robot_distance', PoseArray, queue_size = 10)
 
-    # Define the base frame
-    # base_frame = 'torso'
+    # Define the base frame of the robot
     base_frame = 'base'
     # Initialize empty array used to save the name of the robot's frame
     frame_robot = []
-    # Push back the name of the robot's frame
-    # frame_robot.append('left_hand_camera')
-    # frame_robot.append('left_lower_forearm')
-    # frame_robot.append('left_wrist')
+    # Push back the name of robot's frame that we want to consider. The number of frames should be the same as the value of variable number_robot
     frame_robot.append('flange')
     frame_robot.append('link5')
     frame_robot.append('link4')
-    # Enter the value for the number of robot's frame used
+    # Enter the value for the number of robot's frame used. This should correspond with the number of frames used in array frame_robot
     number_robot = 3
 
     # Initialize empty array used to save the name of the human's frame
     frame_human = []
-    # Push back the name of the human's frame
+    # Push back the name of the human's frame. The number of frames should be the same as the value of variable number_human
     frame_human.append('left_elbow'+'_'+str(index))
     frame_human.append('left_shoulder'+'_'+str(index))
     frame_human.append('left_hand'+'_'+str(index))
-    # Enter the value for the number of human's frame used
+    # Enter the value for the number of human's frame used. This should correspond with the number of frames used in array frame_human
     number_human = 3
     # Set the rate of the code to be 40 Hz
     rate = rospy.Rate(40.0)
@@ -71,8 +68,6 @@ if __name__ == '__main__':
             pose_dummy.position.z = trans[2]
             # Put the Pose into the PoseArray
             pose_frame.poses.append(pose_dummy)
-            # print frame_robot[i]
-            # print pose_dummy
 
         # Listen to the frames on the human body
     	for i in range(0,number_human):
@@ -89,10 +84,7 @@ if __name__ == '__main__':
     	  pose_dummy.position.z = trans[2]
           # Put the Pose into the PoseArray
     	  pose_frame.poses.append(pose_dummy)
-        #   print frame_human[i]
-        #   print pose_dummy
-
-
+        
         # Check the length of the Pose array
     	if(len(pose_frame.poses) == number_robot+number_human):
           # Execute when the length of Pose array equals the total number of frame on the robot and human body
